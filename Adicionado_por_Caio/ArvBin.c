@@ -128,6 +128,26 @@ int main(){
   }
   printOrdem(raiz);
   imprimeGrafoEmOrdem(raiz,0);
-  
+  /*
+2            1
+           /   
+1        2
+           \
+2             3
+                \
+3                 4
+       /           
+0    5  
+       \
+3                 10
+                /   
+2             9
+                \
+3                 8
+           /      
+1        7    
+           \
+2            6
+  */
   return 0;
 }
