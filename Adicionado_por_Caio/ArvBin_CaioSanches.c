@@ -43,24 +43,24 @@ void printPreO(struct NO* raiz){
 }
 void printEmO(struct NO* raiz){
   if(raiz != NULL){
-    printPreO(raiz->esq);
+    printEmO(raiz->esq);
     printf("%i ",raiz->info);
-    printPreO(raiz->dir);
+    printEmO(raiz->dir);
   }
 }
 void printPosO(struct NO* raiz){
   if(raiz != NULL){
-    printPreO(raiz->esq);
-    printPreO(raiz->dir);
+    printPosO(raiz->esq);
+    printPosO(raiz->dir);
     printf("%i ",raiz->info);
   }
 }
 void printOrdem(struct NO* raiz){
-  printf("\n--------------------------------------\n");
+  printf("\n--------------------------------------\nPré-ordem:\n");
   printPreO(raiz);
-  printf("\n--------------------------------------\n");
+  printf("\n--------------------------------------\nEm ordem:\n");
   printEmO(raiz);
-  printf("\n--------------------------------------\n");
+  printf("\n--------------------------------------\nPós-ordem:\n");
   printPosO(raiz);
   printf("\n--------------------------------------\n\n");
 }
@@ -110,8 +110,52 @@ void imprimeGrafoEmOrdem(struct NO* raiz, int nivel_NO){  // EmOrdem
   }
 }
 
+struct NO* MinDir(struct NO* raiz){
+    struct NO* atual = raiz;
+    while (atual->esq != NULL)
+    {
+        atual = atual->esq;
+    }
+    return atual;
+}
+
+struct NO* MaiEsq(struct NO* raiz){
+    struct NO* atual = raiz;
+    while (atual->esq != NULL)
+    {
+        atual = atual->dir;
+    }
+    return atual;
+}
+
+struct NO* excluir(struct NO* raiz, int valor){
+  
+  if(valor < raiz->info){
+    raiz->esq = excluir(raiz->esq,valor);
+    
+  }else if(valor > raiz->info){
+    raiz->dir = excluir(raiz->dir, valor);
+  }else{
+    if(raiz->esq == NULL){
+      struct NO* temp = raiz->dir;
+      free(raiz);
+      return temp;
+    }else if(raiz->dir == NULL){
+      struct NO* temp = raiz->esq;
+      free(raiz);
+      return temp;
+    }
+    struct NO* temp = MinDir(raiz->dir);
+    raiz->info = temp->info;
+    raiz->dir = excluir(raiz->dir, temp->info);
+  }
+  
+  return raiz;
+}
+
 int main(){
   int i,N=10, dados[10]={5,2,3,7,9,6,1,8,4,10};
+  //int i,N=11, dados[11]={12,10,15,6,11,14,20,1,8,13,16};
   /*
                        5
                     /     \
@@ -128,26 +172,12 @@ int main(){
   }
   printOrdem(raiz);
   imprimeGrafoEmOrdem(raiz,0);
-  /*
-2            1
-           /   
-1        2
-           \
-2             3
-                \
-3                 4
-       /           
-0    5  
-       \
-3                 10
-                /   
-2             9
-                \
-3                 8
-           /      
-1        7    
-           \
-2            6
-  */
+  
+  excluir(raiz, 3);
+  printf("\n\n\n\n\n\n\n\n");
+  imprimeGrafoEmOrdem(raiz,0);
+  printf("\n\n\n\n\n\n\n\n");
+  printOrdem(raiz);
+  
   return 0;
 }
