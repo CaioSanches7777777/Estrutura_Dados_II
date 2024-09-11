@@ -18,24 +18,24 @@ struct NO* criaNO(int info){
   novoNO->info = info;
   novoNO->esq = NULL;
   novoNO->dir = NULL;
-  novoNO->alt = 0;    //
+  novoNO->alt = 0;    //alterado para AVL
 
   return novoNO;
 }
 
-int altura(struct NO *no){
+int altura(struct NO *no){  //alterado para AVL
   if (no == NULL)
     return -1;      
   return no->alt; 
 }
 
-int fatorBalanceamento(struct NO *no){
+int fatorBalanceamento(struct NO *no){  //alterado para AVL
   if (no == NULL)
     return 0; 
   return altura(no->esq) - altura(no->dir);
 }
 
-struct NO* rotacaoDir(struct NO *no){
+struct NO* rotacaoDir(struct NO *no){  //alterado para AVL
   struct NO *novaRaiz = no->esq;       
   struct NO *subArvore = novaRaiz->dir; 
 
@@ -43,38 +43,38 @@ struct NO* rotacaoDir(struct NO *no){
   no->esq = subArvore; 
 
 
-  if (altura(no->esq) > altura(no->dir)) 
+  if (altura(no->esq) > altura(no->dir)){
     no->alt = 1 + altura(no->esq);      
-  else
+  }else{
     no->alt = 1 + altura(no->dir); 
-  if (altura(novaRaiz->esq) > altura(novaRaiz->dir)) 
+  }if (altura(novaRaiz->esq) > altura(novaRaiz->dir)){ 
     novaRaiz->alt = 1 + altura(novaRaiz->esq);      
-  else
+  }else{
     novaRaiz->alt = 1 + altura(novaRaiz->dir); 
-
+  }
   return novaRaiz; 
 }
 
-struct NO* rotacaoEsq(struct NO *no){
+struct NO* rotacaoEsq(struct NO *no){  
   struct NO *novaRaiz = no->dir;         
   struct NO *subArvore = novaRaiz->esq; 
 
   novaRaiz->esq = no; 
   no->dir = subArvore; 
 
-  if (altura(no->esq) > altura(no->dir)) 
+  if (altura(no->esq) > altura(no->dir)){ //
     no->alt = 1 + altura(no->esq);      
-  else
+  }else{
     no->alt = 1 + altura(no->dir); 
-  if (altura(novaRaiz->esq) > altura(novaRaiz->dir)) 
+  }if (altura(novaRaiz->esq) > altura(novaRaiz->dir)){ 
     novaRaiz->alt = 1 + altura(novaRaiz->esq);      
-  else
+  }else{
     novaRaiz->alt = 1 + altura(novaRaiz->dir); 
-
+  }
   return novaRaiz; 
 }
 
-struct NO* balanceamento(struct NO *raiz, int info){
+struct NO* balanceamento(struct NO *raiz, int info){  //criado para AVL
   if (raiz == NULL){
     return raiz;
   }
@@ -85,13 +85,13 @@ struct NO* balanceamento(struct NO *raiz, int info){
   }
   int balanceamento = fatorBalanceamento(raiz); 
 
-  if (balanceamento > 1 && info < raiz->esq->info) 
+  if (balanceamento > 1 && info < raiz->esq->info){
     return rotacaoDir(raiz);                      
 
-  if (balanceamento < -1 && info > raiz->dir->info) 
+  }if (balanceamento < -1 && info > raiz->dir->info){ 
     return rotacaoEsq(raiz);                     
-
-  if (balanceamento > 1 && info > raiz->esq->info){
+  
+  }if (balanceamento > 1 && info > raiz->esq->info){
     raiz->esq = rotacaoEsq(raiz->esq); 
     return rotacaoDir(raiz);              
   }
@@ -114,7 +114,7 @@ struct NO* insere(struct NO* raiz, int info){
        raiz->dir = insere(raiz->dir, info);
      }
   }
-  return balanceamento(raiz, info);
+  return balanceamento(raiz, info);  //alterado para AVL
 }
 
 void printPreO(struct NO* raiz){
@@ -269,57 +269,3 @@ int main(){
 
   return 0;
 }
-
-/*
-struct NO *encontrarMinimo(struct NO *no){
-  struct NO *atual = no;
-
-  while (atual && atual->esq != NULL)
-    atual = atual->esq;
-  return atual;
-}
-
-struct NO* encontrarMaximo(struct NO* no) {
-  if (no == NULL)
-    return NULL;
-
-  while (no->dir != NULL) {
-    no = no->dir;
-  }
-  return no;
-}
-
-struct NO *excluir(struct NO *raiz, int valor) {
-  if (raiz == NULL){
-    return raiz;
-  }
-
-  if (valor < raiz->info){
-    raiz->esq = excluir(raiz->esq, valor); 
-  }else if (valor > raiz->info){
-    raiz->dir = excluir(raiz->dir, valor); 
-  }else{
-    if (raiz->esq == NULL){
-      struct NO *temp = raiz->dir; 
-      free(raiz);                        
-      return temp;                        
-    }else if (raiz->dir == NULL){
-      struct NO *temp = raiz->esq; 
-      free(raiz);                         
-      return temp;                        
-    }
-
-    if (altura(raiz->esq) >= altura(raiz->dir)) {
-
-      struct NO *temp = encontrarMaximo(raiz->esq); 
-      raiz->info = temp->info;                              
-      raiz->esq = excluir(raiz->esq, temp->info); 
-    }else{   
-      struct NO *temp = encontrarMinimo(raiz->dir); 
-      raiz->info = temp->info;  
-      raiz->dir = excluir(raiz->dir, temp->info);   
-    }
-  }
-  return balanceamento(raiz, valor);
-}
-*/
