@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct NO{
-  int info;
+struct NO {
+  int valor;
+  int alt;
   struct NO *esq;
   struct NO *dir;
-  int alt;
 };
 
+typedef struct NO *AVL;
 
 struct NO* criaNO(int info){
   struct NO* novoNO = (struct NO*) malloc(sizeof(struct NO));
@@ -15,7 +16,7 @@ struct NO* criaNO(int info){
     return 0;
   }
 
-  novoNO->info = info;
+  novoNO->valor = info;
   novoNO->esq = NULL;
   novoNO->dir = NULL;
   novoNO->alt = 0;    //alterado para AVL
@@ -23,19 +24,76 @@ struct NO* criaNO(int info){
   return novoNO;
 }
 
-int altura(struct NO *no){  //alterado para AVL
-  if (no == NULL)
-    return -1;      
-  return no->alt; 
+
+struct NO *maiorDir(struct NO *no) {
+  if (no == NULL){
+    return no;
+  }
+  struct NO *aux;
+
+  if (no->dir != NULL){
+    return maiorDir(no->dir);
+  }else {
+    aux = no;
+
+    if (no->esq != NULL){
+      no = no->esq;
+    }else{
+      no = NULL;
+    }
+  }
+
+  return aux;
 }
 
-int fatorBalanceamento(struct NO *no){  //alterado para AVL
-  if (no == NULL)
-    return 0; 
-  return altura(no->esq) - altura(no->dir);
+int altNO(struct NO *no) {
+  if (no == NULL){
+    return -1;
+  }else{
+    return no->alt;
+  }
 }
 
-struct NO* rotacaoDir(struct NO *no){  //alterado para AVL
+int fatBalanc(struct NO *no) {
+  return (altNO(no->esq) - altNO(no->dir)); 
+}
+
+int maior(int num1, int num2) {
+  if (num1 > num2){
+    return num1;
+  }else{
+    return num2;
+  }
+}
+
+struct NO *rotacaoR(struct NO *no) {
+  struct NO *aux;
+
+  aux = no->esq;
+  no->esq = aux->dir;
+  aux->dir = no;
+
+  no->alt = maior(altNO(no->esq), altNO(no->dir)) + 1;
+  aux->alt = maior(altNO(aux->esq), no->alt) + 1;
+
+  return aux;
+}
+
+struct NO *rotacaoL(struct NO *no) {
+  struct NO *aux;
+
+  aux = no->dir;
+  no->dir = aux->esq;
+  aux->esq = no;
+
+  no->alt = maior(altNO(no->esq), altNO(no->dir)) + 1;
+  aux->alt = maior(no->alt, altNO(aux->dir)) + 1;
+
+  return aux;
+}
+
+/*
+struct NO* rotacaoR(struct NO *no){  //alterado para AVL
   struct NO *novaRaiz = no->esq;       
   struct NO *subArvore = novaRaiz->dir; 
 
@@ -43,62 +101,62 @@ struct NO* rotacaoDir(struct NO *no){  //alterado para AVL
   no->esq = subArvore; 
 
 
-  if (altura(no->esq) > altura(no->dir)){
-    no->alt = 1 + altura(no->esq);      
+  if (altNO(no->esq) > altNO(no->dir)){
+    no->alt = 1 + altNO(no->esq);      
   }else{
-    no->alt = 1 + altura(no->dir); 
-  }if (altura(novaRaiz->esq) > altura(novaRaiz->dir)){ 
-    novaRaiz->alt = 1 + altura(novaRaiz->esq);      
+    no->alt = 1 + altNO(no->dir); 
+  }if (altNO(novaRaiz->esq) > altNO(novaRaiz->dir)){ 
+    novaRaiz->alt = 1 + altNO(novaRaiz->esq);      
   }else{
-    novaRaiz->alt = 1 + altura(novaRaiz->dir); 
+    novaRaiz->alt = 1 + altNO(novaRaiz->dir); 
   }
   return novaRaiz; 
 }
 
-struct NO* rotacaoEsq(struct NO *no){  
+struct NO* rotacaoL(struct NO *no){  
   struct NO *novaRaiz = no->dir;         
   struct NO *subArvore = novaRaiz->esq; 
 
   novaRaiz->esq = no; 
   no->dir = subArvore; 
 
-  if (altura(no->esq) > altura(no->dir)){ //
-    no->alt = 1 + altura(no->esq);      
+  if (altNO(no->esq) > altNO(no->dir)){ //
+    no->alt = 1 + altNO(no->esq);      
   }else{
-    no->alt = 1 + altura(no->dir); 
-  }if (altura(novaRaiz->esq) > altura(novaRaiz->dir)){ 
-    novaRaiz->alt = 1 + altura(novaRaiz->esq);      
+    no->alt = 1 + altNO(no->dir); 
+  }if (altNO(novaRaiz->esq) > altNO(novaRaiz->dir)){ 
+    novaRaiz->alt = 1 + altNO(novaRaiz->esq);      
   }else{
-    novaRaiz->alt = 1 + altura(novaRaiz->dir); 
+    novaRaiz->alt = 1 + altNO(novaRaiz->dir); 
   }
   return novaRaiz; 
 }
+*/
 
 struct NO* balanceamento(struct NO *raiz, int info){  //criado para AVL
   if (raiz == NULL){
     return raiz;
   }
-  if (altura(raiz->esq) > altura(raiz->dir)){
-    raiz->alt = 1 + altura(raiz->esq); 
+  if (altNO(raiz->esq) > altNO(raiz->dir)){
+    raiz->alt = 1 + altNO(raiz->esq); 
   }else{
-    raiz->alt = 1 + altura(raiz->dir); 
+    raiz->alt = 1 + altNO(raiz->dir); 
   }
-  int balanceamento = fatorBalanceamento(raiz); 
+  int balanceamento = fatBalanc(raiz); 
 
-  if (balanceamento > 1 && info < raiz->esq->info){
-    return rotacaoDir(raiz);                      
+  if (balanceamento > 1 && info < raiz->esq->valor){
+    return rotacaoR(raiz);                      
 
-  }if (balanceamento < -1 && info > raiz->dir->info){ 
-    return rotacaoEsq(raiz);                     
+  }if (balanceamento < -1 && info > raiz->dir->valor){ 
+    return rotacaoL(raiz);                     
   
-  }if (balanceamento > 1 && info > raiz->esq->info){
-    raiz->esq = rotacaoEsq(raiz->esq); 
-    return rotacaoDir(raiz);              
+  }if (balanceamento > 1 && info > raiz->esq->valor){
+    raiz->esq = rotacaoL(raiz->esq); 
+    return rotacaoR(raiz);              
   }
-
-  if (balanceamento < -1 && info < raiz->dir->info){
-    raiz->dir = rotacaoDir(raiz->dir); 
-    return rotacaoEsq(raiz);                  
+  if (balanceamento < -1 && info < raiz->dir->valor){
+    raiz->dir = rotacaoR(raiz->dir); 
+    return rotacaoL(raiz);                  
   }
 
   return raiz; 
@@ -108,7 +166,7 @@ struct NO* insere(struct NO* raiz, int info){
   if(raiz == NULL){//se a raiz não existir
     raiz = criaNO(info);
   }else{
-     if(info <= raiz->info){
+     if(info <= raiz->valor){
        raiz->esq = insere(raiz->esq, info);
      }else{
        raiz->dir = insere(raiz->dir, info);
@@ -119,7 +177,7 @@ struct NO* insere(struct NO* raiz, int info){
 
 void printPreO(struct NO* raiz){
   if(raiz != NULL){
-    printf("%i ",raiz->info);
+    printf("%i ",raiz->valor);
     printPreO(raiz->esq);
     printPreO(raiz->dir);
   }
@@ -127,7 +185,7 @@ void printPreO(struct NO* raiz){
 void printEmO(struct NO* raiz){
   if(raiz != NULL){
     printEmO(raiz->esq);
-    printf("%i ",raiz->info);
+    printf("%i ",raiz->valor);
     printEmO(raiz->dir);
   }
 }
@@ -135,7 +193,7 @@ void printPosO(struct NO* raiz){
   if(raiz != NULL){
     printPosO(raiz->esq);
     printPosO(raiz->dir);
-    printf("%i ",raiz->info);
+    printf("%i ",raiz->valor);
   }
 }
 void printOrdem(struct NO* raiz){
@@ -176,7 +234,7 @@ void imprimeGrafoEmOrdem(struct NO* raiz, int nivel_NO){  // EmOrdem
     for(i=0;i<nivel_NO;i++){ 
       printf("\t");
     }
-    printf("%d",(*raiz).info);
+    printf("%d",(*raiz).valor);
 
     if((*raiz).esq != NULL){
       //printf("\t\n|");
@@ -211,15 +269,15 @@ struct NO* encontrarMaximo(struct NO* no) {
   return no;
 }
 
-struct NO* excluir(struct NO *raiz, int valor) {
+struct NO* excluir(struct NO *raiz, int info) {
   if (raiz == NULL){
     return raiz;
   }
 
-  if (valor < raiz->info){
-    raiz->esq = excluir(raiz->esq, valor); 
-  }else if (valor > raiz->info){
-    raiz->dir = excluir(raiz->dir, valor); 
+  if (info < raiz->valor){
+    raiz->esq = excluir(raiz->esq, info); 
+  }else if (info > raiz->valor){
+    raiz->dir = excluir(raiz->dir, info); 
   }else{
     if (raiz->esq == NULL){
       struct NO *temp = raiz->dir; 
@@ -231,18 +289,18 @@ struct NO* excluir(struct NO *raiz, int valor) {
       return temp;                        
     }
 
-    if (altura(raiz->esq) >= altura(raiz->dir)) {
+    if (altNO(raiz->esq) >= altNO(raiz->dir)) {
 
       struct NO *temp = encontrarMaximo(raiz->esq); 
-      raiz->info = temp->info;                              
-      raiz->esq = excluir(raiz->esq, temp->info); 
+      raiz->valor = temp->valor;                              
+      raiz->esq = excluir(raiz->esq, temp->valor); 
     }else{   
       struct NO *temp = encontrarMinimo(raiz->dir); 
-      raiz->info = temp->info;  
-      raiz->dir = excluir(raiz->dir, temp->info);   
+      raiz->valor = temp->valor;  
+      raiz->dir = excluir(raiz->dir, temp->valor);   
     }
   }
-  return balanceamento(raiz, valor);
+  return balanceamento(raiz, info);
 }
 
 int main(){
@@ -258,7 +316,7 @@ int main(){
   printf("\n\n-----------------------\n\n");
   
   excluir(raiz, 50);
-  //excluir(raiz, 95);
+  excluir(raiz, 95);
   excluir(raiz, 70);
   excluir(raiz, 60);
   excluir(raiz, 35);
