@@ -203,7 +203,6 @@ void imprimeGrafoEmOrdem(struct NO* raiz, int nivel_NO){  // EmOrdem
 
 int main(){
     struct NO *raiz = NULL;
-    // Exemplo de inserção de valores na árvore Red-Black
     int i,N=10, dados[10]={12, 31, 20, 17, 11, 8, 3, 24, 15, 33};
     
     for (i = 0; i < 10; i++){
