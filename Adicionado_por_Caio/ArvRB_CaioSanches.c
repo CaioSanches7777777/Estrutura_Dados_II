@@ -152,7 +152,7 @@ void printOrdem(struct NO* raiz){
 
 void imprimeGrafoEmOrdem(struct NO* raiz, int nivel_NO){  // EmOrdem
   int i;
-  //printf("\n%i",nivel);
+  //printf("\n%i",nivel_NO);
 
   if(raiz == NULL){
     return;
@@ -164,10 +164,16 @@ void imprimeGrafoEmOrdem(struct NO* raiz, int nivel_NO){  // EmOrdem
 
     if((*raiz).dir != NULL){
       //printf("\t\n/\r");
-      printf("\t");
+      //printf("\t");
       imprimeGrafoEmOrdem((*raiz).dir,nivel_NO+1);
+      printf("\r");
+      /*
+      for(i=0;i<nivel_NO+2;i++){ 
+        printf("\t");
+      }
+      printf("|");
+      //*/
       printf("\n");
-
       for(i=0;i<nivel_NO+2;i++){ // não funciona (n sei pq)
         printf("\t");
       }
@@ -175,13 +181,16 @@ void imprimeGrafoEmOrdem(struct NO* raiz, int nivel_NO){  // EmOrdem
     }
 
     printf("\r%d\t",nivel_NO); // tem que printar esse "\r" pra voltar para o inicio da linha antes de dar o parágrafo que põe o nó na posição certa
+    
+    
+    printf("\r\t");
     for(i=0;i<nivel_NO;i++){ 
-      printf("\t");
+      printf("\t|");
     }
     if((*raiz).cor == 0){
-        printf("<%dr>",(*raiz).valor);
+        printf("\b<%dr>",(*raiz).valor);
     }else if((*raiz).cor == 1){
-        printf("[%db]",(*raiz).valor);
+        printf("\b[%db]",(*raiz).valor);
     }
 
     if((*raiz).esq != NULL){
@@ -192,6 +201,12 @@ void imprimeGrafoEmOrdem(struct NO* raiz, int nivel_NO){  // EmOrdem
         printf("\t");
       }
       printf("\b\\\n");
+      /*
+      for(i=0;i<nivel_NO+2;i++){ 
+        printf("\t");
+      }
+      printf("|");
+      //*/
 
       imprimeGrafoEmOrdem((*raiz).esq,nivel_NO+1);
     }
