@@ -56,39 +56,39 @@ void rotacaoDir(NO **raiz, NO *no){
     no->pai = aux;
 }
 
-void corrigirViolacao(NO **raiz, NO *subárvore){
-    while (subárvore != *raiz && subárvore->pai->cor == VERMELHO){
-        if (subárvore->pai == subárvore->pai->pai->esq){
-            NO *aux = subárvore->pai->pai->dir;
+void corrigirViolacao(NO **raiz, NO *subArv){
+    while (subArv != *raiz && subArv->pai->cor == VERMELHO){
+        if (subArv->pai == subArv->pai->pai->esq){
+            NO *aux = subArv->pai->pai->dir;
             if (aux != NULL && aux->cor == VERMELHO){
-                subárvore->pai->cor = PRETO;
+                subArv->pai->cor = PRETO;
                 aux->cor = PRETO;
-                subárvore->pai->pai->cor = VERMELHO;
-                subárvore = subárvore->pai->pai;
+                subArv->pai->pai->cor = VERMELHO;
+                subArv = subArv->pai->pai;
             }else{
-                if (subárvore == subárvore->pai->dir){
-                    subárvore = subárvore->pai;
-                    rotacaoEsq(raiz, subárvore);
+                if (subArv == subArv->pai->dir){
+                    subArv = subArv->pai;
+                    rotacaoEsq(raiz, subArv);
                 }
-                subárvore->pai->cor = PRETO;
-                subárvore->pai->pai->cor = VERMELHO;
-                rotacaoDir(raiz, subárvore->pai->pai);
+                subArv->pai->cor = PRETO;
+                subArv->pai->pai->cor = VERMELHO;
+                rotacaoDir(raiz, subArv->pai->pai);
             }
         }else{
-            NO *aux = subárvore->pai->pai->esq;
+            NO *aux = subArv->pai->pai->esq;
             if (aux != NULL && aux->cor == VERMELHO){
-                subárvore->pai->cor = PRETO;
+                subArv->pai->cor = PRETO;
                 aux->cor = PRETO;
-                subárvore->pai->pai->cor = VERMELHO;
-                subárvore = subárvore->pai->pai;
+                subArv->pai->pai->cor = VERMELHO;
+                subArv = subArv->pai->pai;
             }else{
-                if (subárvore == subárvore->pai->esq){
-                    subárvore = subárvore->pai;
-                    rotacaoDir(raiz, subárvore);
+                if (subArv == subArv->pai->esq){
+                    subArv = subArv->pai;
+                    rotacaoDir(raiz, subArv);
                 }
-                subárvore->pai->cor = PRETO;
-                subárvore->pai->pai->cor = VERMELHO;
-                rotacaoEsq(raiz, subárvore->pai->pai);
+                subArv->pai->cor = PRETO;
+                subArv->pai->pai->cor = VERMELHO;
+                rotacaoEsq(raiz, subArv->pai->pai);
             }
         }
     }
@@ -96,27 +96,27 @@ void corrigirViolacao(NO **raiz, NO *subárvore){
 }
 
 void inserir(NO **raiz, int valor){
-    NO *subárvore = criarNo(valor);
+    NO *subArv = criarNo(valor);
     NO *aux = NULL;
     NO *no = *raiz;
 
     while (no != NULL){
         aux = no;
-        if (subárvore->valor < no->valor){
+        if (subArv->valor < no->valor){
             no = no->esq;
         }else{
             no = no->dir;
         }
     }
-    subárvore->pai = aux;
+    subArv->pai = aux;
     if (aux == NULL){
-        *raiz = subárvore;
-    }else if (subárvore->valor < aux->valor){
-        aux->esq = subárvore;
+        *raiz = subArv;
+    }else if (subArv->valor < aux->valor){
+        aux->esq = subArv;
     }else{
-        aux->dir = subárvore;
+        aux->dir = subArv;
     }
-    corrigirViolacao(raiz, subárvore);
+    corrigirViolacao(raiz, subArv);
 }
 
 void printPreO(struct NO* raiz){
