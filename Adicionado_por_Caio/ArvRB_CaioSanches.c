@@ -179,7 +179,7 @@ void imprimeGrafoEmOrdem(struct NO* raiz, int nivel_NO){  // EmOrdem
       printf("\t");
     }
     if((*raiz).cor == 0){
-        printf("(%dr)",(*raiz).valor);
+        printf("<%dr>",(*raiz).valor);
     }else if((*raiz).cor == 1){
         printf("[%db]",(*raiz).valor);
     }
@@ -199,8 +199,6 @@ void imprimeGrafoEmOrdem(struct NO* raiz, int nivel_NO){  // EmOrdem
   }
 }
 
-
-
 int main(){
     struct NO *raiz = NULL;
     int i,N=10, dados[10]={12, 31, 20, 17, 11, 8, 3, 24, 15, 33};
@@ -211,6 +209,7 @@ int main(){
     printf("\n");
     printOrdem(raiz);
     imprimeGrafoEmOrdem(raiz, 0);
+    printf("\n");
 
     return 0;
 }
