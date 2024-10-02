@@ -134,7 +134,7 @@ dupla direita
 15─┤
    4
    
-dupla esquerda
+dupla esquerda	
       70
    50─┤
    │  20
@@ -158,4 +158,27 @@ rotação esquerda
 	  │ 10
       4─┘
 	  
-para prezervar o caso médio O log n atravéz do fator de balanceamento. A red black prezerva o caso médio por meio do balanceamento e recoloração para prezervar o numero de nós pretos em cada caminho
+para prezervar o caso médio O log n atravéz do fator de balanceamento. A red black prezerva o caso médio por meio do balanceamento e recoloração para prezervar o numero de nós pretos em cada caminho.
+
+rotação simples
+	  100
+   70─┘
+50─┤
+   │  20
+   10─┤  
+      4
+	  
+
+	  100
+   70─┘
+50─┤
+   │  20
+   10─┘ 
+   
+   
+   100
+50─┤
+   │  20
+   10─┘ 
+   
+O balanceamento na remoção na AVL só prezerva o fator de balanceamento e o balanceamento, na Red Black ocorre a recoloração além do balanceamento
