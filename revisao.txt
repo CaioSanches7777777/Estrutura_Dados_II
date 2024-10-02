@@ -1,0 +1,161 @@
+	┤─│┐┘
+	
+	
+	
+
+
+[3,9,2,1,4,5]
+  5─┐
+  │ 2
+9─┤
+  │ 3
+  4─┤
+    1
+[9,4,5,1,3,2]
+	
+	
+[4,5,1,3,2]
+  1
+  │ 
+5─┤
+  │ 2
+  4─┤
+    3
+[5,4,1,3,2]
+todo pai deve ser maior ou igual aos seus filhos
+
+
+[7, 3, 18, 10, 22, 8, 11, 26]
+
+7b
+
+	
+7b─┐
+   3r
+ 
+ 
+   18r
+7b─┤
+   3r 
+
+
+
+   18b─┐ 
+   │   10r
+7b─┤       
+   │
+   3b
+
+
+
+       22r
+   18b─┤  
+   │   10r
+7b─┤       
+   │
+   3b
+
+
+       22b
+   18r─┤  
+   │   10b─┐
+7b─┤       8r
+   │
+   3b
+
+
+       22b
+   18r─┤  
+   │   │   11r
+   │   10b─┤
+7b─┤       8r
+   │
+   3b
+   
+
+ 		   26r
+       22b─┘
+   18r─┤  
+   │   │   11r
+   │   10b─┤
+7b─┤       8r
+   │
+   3b
+
+
+cada caminho, da raiz a cada folha, deve possuir o mesmo numero de nós pretos.
+
+manter o caso de busca como O log n
+
+
+ 		   26r
+       22b─┘
+   11r─┤  
+   │   │   
+   │   10b─┐
+7b─┤       8r
+   │
+   3b
+   
+   
+    	   26r
+       22b─┘
+   10r─┤  
+   │   │   
+   │   8b
+7b─┤       
+   │
+   3b
+   
+   
+        26r
+    22b─┘ 
+10b─┤       
+    │  8r
+    7b─┘
+	
+	
+	
+
+20
+
+
+20─┐
+   4
+   
+dupla direita
+   20
+15─┤
+   4
+   
+   
+      70
+   20─┘
+15─┤
+   4
+   
+dupla esquerda
+      70
+   50─┤
+   │  20
+15─┤  
+   4
+   
+rotação esquerda
+	  100
+   70─┘
+50─┤
+   │  20
+   15─┤  
+      4   
+
+   
+	  100
+   70─┘
+50─┤
+   │  20
+   15─┤  
+	  │ 10
+      4─┘
+	  
+para prezervar o caso médio O log n atravéz do fator de balanceamento. A red black prezerva o caso médio por meio do balanceamento e recoloração para prezervar o numero de nós pretos em cada caminho
